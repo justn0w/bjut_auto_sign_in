@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import requests
 import smtplib
 from email.mime.text import MIMEText
+import argparse
 
 
 
@@ -165,17 +166,28 @@ class Auto:
             "uid": "72940",
             "xjzd": ""
         }
-        s = requests.session()
         url = "https://itsapp.bjut.edu.cn/ncov/wap/default/save" #提交数据url
-        res = s.post(url=url, data=data, cookies=self.cookie)
+        res = requests.post(url=url, data=data, cookies=self.cookie)
         return res
+
+def main(username, password):
+    auto = Auto(username, password)
+    print("创建用实例")
+    auto.createDate()
+    print("获取时间")
+    auto.login()
+    print("获取cookie")
+    return auto.save()
+    
+        
 
 
 if __name__ == "__main__":
-    auto = Auto(username="", password="")
-    auto.login()
-    auto.createDate()
-    rs = auto.save()
-    print(rs.status_code)
-    print(rs.json())
+    parser = argparse.ArgumentParser(description="输入用户名和密码")
+    parser.add_argument('--username', type=str, default=None)
+    parser.add_argument('--password', type=str, default=None)
+    args = parser.parse_args()
+    rs = main(args.username, args.password)
+    print("获取打卡结果:" + rs.json()['m'])
+
         
