@@ -27,14 +27,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: |
+      - run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run application
         env:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-        run: |
+      - run: |
           python3 auto.py --username=${{ secrets.USERNAME }} --password=${{ secrets.PASSWORD }}
 
       
